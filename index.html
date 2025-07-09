@@ -5,8 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proyecto</title>
 </head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Times New Roman', Times, serif;
+      background: linear-gradient(135deg, #c9d6ff, #e2e2e2);
+      display: flex;
+      align-items: center; 
+      justify-content: center; 
+      min-height: 700px;
+    }
+
+    h1 {
+      color: #0d47a1;
+      font-size: 35px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #20265f;
+      font-weight: 400;
+      margin-bottom: 30px;
+      font-size: 18px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px; 
+    }
+
+    .container {
+      background-color: #f9f5f5e3;
+      padding: 40px 30px;
+      border-radius: 20px;
+      text-align: center;
+      width: 90%; 
+      max-width: 400px; 
+      box-shadow: 0 0 4px #474f9a;
+    }
+
+
+    button {
+      background-color: #2f20a3e4;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease; 
+      box-shadow: 0 4px 6px #6170e4;
+    }
+
+    button:hover {
+      background-color: #0d47a1;
+      transform: scale(1.03);
+      box-shadow: 0 6px 12px #474f9a;
+    }
+    
+  </style>
+</head>
+
 <body>
-    <a href="ProyectoAvance1/pagesA1/login.html">Proyecto avance 1</a>
-    <a href="ProyectoAvance2/pages/login.html">Proyecto avance 2</a>
+  <div class="container">
+    <h1>Proyecto II-51</h1>
+    <h2>Estudiante: Milagros Hernández</h2>
+    <form>
+      <button type="submit" formaction="ProyectoAvance1/pagesA1/login.html">Proyecto avance 1</button>
+      <button type="submit" formaction="ProyectoAvance2/pages/login.html">Proyecto avance 2</button>
+    </form>
+  </div>
 </body>
 </html>
