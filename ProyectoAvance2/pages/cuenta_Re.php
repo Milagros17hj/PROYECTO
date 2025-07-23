@@ -1,3 +1,6 @@
+<?php
+  // Simulación de conexión
+?>
 <!DOCTYPE html>
 <html lang="es">
 

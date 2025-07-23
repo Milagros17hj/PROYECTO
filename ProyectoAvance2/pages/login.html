@@ -132,8 +132,8 @@
     font-style: italic;
     cursor: pointer; /* Cambia el cursor al pasar por encima */
   }
-  
-  .registro-link {
+
+  .registrologin-link {
     text-align: left;
     margin-top: 15px;
     font-style: italic;
@@ -154,7 +154,7 @@
 
   <main>
     <section>
-      <form action="Inicio.html" method="get">
+      <form action="Inicio.php" method="post">
         <fieldset>
           <legend>Inicio de Sesión</legend>
 
@@ -163,15 +163,16 @@
             <input class="form-input" type="email" id="email" name="email" required />
 
             <label for="password">Contraseña:</label>
-            <input class="form-input" type="password" id="password" name="password" required />            
+            <input class="form-input" type="password" id="password" name="password" required minlength="6" />
+          
           </div>
 
           <p class="forgot-password">¿Olvidaste tu contraseña?</p>
 
           <button type="submit">Ingresar</button>
 
-          <p class="registro-link">
-            ¿No tienes una cuenta? <a href="registro.html">Regístrate aquí</a>
+          <p class="registrologin-link">
+            ¿No tienes una cuenta? <a href="cuenta_Re.html">Regístrate aquí</a>
           </p>
 
         </fieldset>
