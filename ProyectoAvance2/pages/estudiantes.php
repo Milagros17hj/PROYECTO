@@ -1,9 +1,9 @@
 <?php
 include("../db.php"); 
 
-// Eliminar estudiante si se envió el ID por GET
-if (isset($_GET['eliminar'])) {
-    $id = intval($_GET['eliminar']);
+// Eliminar estudiante si se envió el ID por POST
+if (isset($_POST['eliminar'])) {
+    $id = intval($_POST['eliminar']);
     $stmt = $pdo->prepare("DELETE FROM estudiantes WHERE id = :id");
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -93,7 +93,6 @@ $estudiantes = $stmt->fetchAll(PDO::FETCH_ASSOC); // esto obtiene todos los estu
       transition: background-color 0.3s ease, transform 0.3s ease; 
       border-radius: 5px; 
       white-space: nowrap; /* Evita que los enlaces se rompan en varias líneas */
-      text-decoration: none;
     }
         
     nav ul li a:hover { /* Efecto al pasar el mouse sobre el enlace */
@@ -365,7 +364,10 @@ $estudiantes = $stmt->fetchAll(PDO::FETCH_ASSOC); // esto obtiene todos los estu
               <td><?= htmlspecialchars($est['curso']) ?></td>
               <td>
                 <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-                <a href="estudiantes.php?eliminar=<?= $est['id'] ?>" class="btn-eliminar" ><i class="fas fa-trash-alt"></i> Eliminar</a>
+                <form method="POST" action="estudiantes.php" class="form-eliminar" style="display:inline;">
+                  <input type="hidden" name="eliminar" value="<?= $est['id'] ?>">
+                  <button type="submit" class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                </form>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -393,26 +395,24 @@ $estudiantes = $stmt->fetchAll(PDO::FETCH_ASSOC); // esto obtiene todos los estu
       window.history.replaceState({}, document.title, window.location.pathname);
     }
     
-    document.querySelectorAll('.btn-eliminar').forEach(boton => {
-      boton.addEventListener('click', function(event) {
-        event.preventDefault();
-        const href = this.getAttribute('href');
-        swal({
-          title: "¿Estás seguro?",
-          text: "¡Una vez eliminado, no podrás recuperarlo!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        }).then((willDelete) => {
-          if (willDelete) {
-            // Redirigir para eliminar en servidor
-            window.location.href = href;
-          } else {
-            swal("El registro está a salvo.");
-          }
-        });
-      });
+   document.querySelectorAll('.form-eliminar').forEach(form => {
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    swal({
+      title: "¿Estás segura?",
+      text: "¡Una vez eliminado, no podrás recuperarlo!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        form.submit(); 
+      } else {
+        swal("El registro está a salvo.");
+      }
     });
+  });
+});
 
     document.getElementById('buscadorEstudiante').addEventListener('keyup', function() {
       const filtro = this.value.toLowerCase();

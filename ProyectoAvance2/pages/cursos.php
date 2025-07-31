@@ -1,9 +1,9 @@
 <?php
-include '../db.php'; // La conexión a la base de datos se encuentra en db.php
+include '../db.php'; // La Conexión a la base de datos se encuentra en db.php
 
 // Eliminar un curso
-if (isset($_GET['eliminar'])) { // Verifica si se ha solicitado eliminar un curso
-    $id = $_GET['eliminar']; // Obtiene el ID del curso a eliminar (isset verifica que el parámetro esté definido)
+if (isset($_POST['eliminar'])) { // Verifica si se ha solicitado eliminar un curso
+    $id = $_POST['eliminar']; // Obtiene el ID del curso a eliminar (isset verifica que el parámetro esté definido)
     $stmt = $pdo->prepare("DELETE FROM cursos WHERE id = ?"); // Prepara la consulta para eliminar el curso
     $stmt->execute([$id]); //Si rxiste el id se elimina
     header("Location: cursos.php?eliminado=true"); //Me redirije a cursos Se usa para la alerta de SweetAlert
@@ -334,7 +334,10 @@ $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <td><?= htmlspecialchars($curso['horario']) ?></td>
             <td>
               <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <a href="cursos.php?eliminar=<?= $curso['id'] ?>" class="btn-eliminar" ><i class="fas fa-trash-alt"></i> Eliminar</a>
+              <form method="POST" action="cursos.php" class="form-eliminar" style="display:inline;">
+                <input type="hidden" name="eliminar" value="<?= $curso['id'] ?>">
+                <button type="submit" class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
+              </form>
             </td>
           </tr>
           <?php endforeach; ?>
@@ -365,26 +368,24 @@ $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       window.history.replaceState({}, document.title, window.location.pathname);
     }  
 
-    document.querySelectorAll('.btn-eliminar').forEach(boton => {
-      boton.addEventListener('click', function(event) {
-        event.preventDefault();
-        const href = this.getAttribute('href');
-        swal({
-          title: "¿Estás seguro?",
-          text: "¡Una vez eliminado, no podrás recuperarlo!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        }).then((willDelete) => {
-          if (willDelete) {
-            // Redirigir para eliminar en servidor
-            window.location.href = href;
-          } else {
-            swal("El registro está a salvo.");
-          }
-        });
-      });
+    document.querySelectorAll('.form-eliminar').forEach(form => {
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    swal({
+      title: "¿Estás segura?",
+      text: "¡Una vez eliminado, no podrás recuperarlo!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        form.submit(); 
+      } else {
+        swal("El registro está a salvo.");
+      }
     });
+  });
+});
 
     // Filtro del buscador para tabla
     document.getElementById('buscadorCurso').addEventListener('keyup', function() { /*función que se ejecuta al escribir en el buscador */

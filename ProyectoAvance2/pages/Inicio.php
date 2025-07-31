@@ -132,11 +132,11 @@ date_default_timezone_set('America/Costa_Rica');
       overflow-y: auto; /* Permite el desplazamiento si el contenido es demasiado largo */
     }
 
-    .lateral-derecho > .cuadro:first-child {
+    .lateral-derecho > .cuadro:first-child { /*estilo para el primer cuadro en el lateral derecho*/
       margin-top: 40px;
     }
 
-    .cuadro, .video-container, .aviso-card, .frase-bienvenida {
+    .cuadro, .video-container, .aviso-card, .frase-bienvenida { /*estilos para los cuadros de contenido, video y avisos*/
       background-color: #ffffff;
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -144,7 +144,7 @@ date_default_timezone_set('America/Costa_Rica');
       
     }
 
-    .cuadro h3, .aviso-card h3 {
+    .cuadro h3, .aviso-card h3 { /*estilos para los títulos de los cuadros y avisos*/
       color: #003366;
       font-size: 15px;
       margin-bottom: 12px;
@@ -154,7 +154,7 @@ date_default_timezone_set('America/Costa_Rica');
       
     }
 
-    .cuadro p, .cuadro ul li {
+    .cuadro p, .cuadro ul li { /*estilos para los párrafos y elementos de lista dentro de los cuadros*/
       margin: 0 0 8px 0;
     }
     
@@ -167,14 +167,14 @@ date_default_timezone_set('America/Costa_Rica');
       align-items: center;
 }
 
-    .cuadro ul {
+    .cuadro ul { /*estilos para las listas dentro de los cuadros*/
       padding-left: 18px;
       margin: 0;
       color: #333333;
 
     }
 
-    .aviso-card ul li {
+    .aviso-card ul li { /*estilos para los elementos de lista dentro de los avisos*/
       display: flex;
       align-items: center;
       gap: 10px;
@@ -200,13 +200,18 @@ date_default_timezone_set('America/Costa_Rica');
       margin: 0;
       text-align: center;
     }
+    
     footer {
+      color: #161515;
       text-align: center;
-      padding: 20px;
+      padding: 10px 0;
+      position: relative;
+      margin-bottom: 0;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
       font-size: 14px;
-      color: #003366;
-      margin-top: 70px;
     }
+
     
   
     .flatpickr-calendar.inline {
@@ -226,7 +231,7 @@ date_default_timezone_set('America/Costa_Rica');
       position: absolute;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 768px) { /* Media query para pantallas pequeñas */
       main {
         margin-right: 0;
         padding: 20px 10px;
@@ -324,7 +329,7 @@ date_default_timezone_set('America/Costa_Rica');
           <li>Nuevo curso de habilidades blandas disponible.</li>
         </ul>
       </div>
-      
+      <!-- /**Sección de Calendario */ -->
       <div class="cuadro">
         <h3><i class="fas fa-calendar-day"></i> Calendario</h3>
         <input id="calendarioFijo" type="text">
@@ -337,6 +342,8 @@ date_default_timezone_set('America/Costa_Rica');
     <p>Contacto: <a href="mailto:mhernandezj@uc.ac.cr">Milagros Hernández</a></p>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <!-- /* Inicialización del calendario */ -->
   <script>
   flatpickr("#calendarioFijo", {
     inline: true,

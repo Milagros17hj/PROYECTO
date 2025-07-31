@@ -2,8 +2,8 @@
 include("../db.php"); 
 
 // Eliminar profesor si se envió el ID
-if (isset($_GET['eliminar'])) {
-    $id = intval($_GET['eliminar']);
+if (isset($_POST['eliminar'])) {
+    $id = intval($_POST['eliminar']);
     $stmt = $pdo->prepare("DELETE FROM profesores WHERE id = :id");
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -432,7 +432,10 @@ $profesores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <i class="fas fa-eye"></i> Detalle
               </button>
               <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <a href="profesores.php?eliminar=<?= $profesor['id'] ?>" class="btn-eliminar" ><i class="fas fa-trash-alt"></i> Eliminar</a>
+              <form method="POST" action="profesores.php" class="form-eliminar" style="display:inline;">
+                <input type="hidden" name="eliminar" value="<?= $profesor['id'] ?>">
+                <button type="submit" class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
+              </form>
               </td>
             </td>
           </tr>
@@ -467,32 +470,36 @@ $profesores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    if (params.has('registrado')) {
-      swal("¡Registro exitoso!", "El profesor ha sido registrado correctamente.", "success");
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
+   const params = new URLSearchParams(window.location.search);
 
-    document.querySelectorAll('.btn-eliminar').forEach(boton => {
-      boton.addEventListener('click', function(event) {
-        event.preventDefault();
-        const href = this.getAttribute('href');
-        swal({
-          title: "¿Estás seguro?",
-          text: "¡Una vez eliminado, no podrás recuperarlo!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        }).then((willDelete) => {
-          if (willDelete) {
-            // Redirigir para eliminar en servidor
-            window.location.href = href;
-          } else {
-            swal("El registro está a salvo.");
-          }
-        });
-      });
+if (params.has('registrado')) {
+  swal("¡Registro exitoso!", "El profesor ha sido registrado correctamente.", "success");
+  window.history.replaceState({}, document.title, window.location.pathname);
+}
+
+if (params.has('eliminado')) {
+  swal("¡Eliminado!", "El profesor ha sido eliminado correctamente.", "success");
+  window.history.replaceState({}, document.title, window.location.pathname);
+}
+
+document.querySelectorAll('.form-eliminar').forEach(form => {
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    swal({
+      title: "¿Estás segura?",
+      text: "¡Una vez eliminado, no podrás recuperarlo!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        form.submit(); 
+      } else {
+        swal("El registro está a salvo.");
+      }
     });
+  });
+});
 
     document.getElementById('buscadorProfesor').addEventListener('keyup', function() {
       const filtro = this.value.toLowerCase();

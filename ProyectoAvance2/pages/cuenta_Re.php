@@ -56,14 +56,16 @@
     }
 
     footer {
+      color: #161515;
       text-align: center;
-      padding: 20px;
-      background-color: #e6eaf5;
+      padding: 10px 0;
+      position: relative;
+      margin-bottom: 0;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
       font-size: 14px;
-      color: #003366;
-      border-top: 2px solid #003366;
-      margin-top: 40px;
     }
+
       
     .button {
       display: flex;
