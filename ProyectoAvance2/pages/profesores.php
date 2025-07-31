@@ -16,7 +16,6 @@ $stmt = $pdo->query("SELECT * FROM profesores");
 $profesores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
