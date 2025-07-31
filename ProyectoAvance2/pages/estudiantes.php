@@ -1,5 +1,5 @@
 <?php
-include("../db.php"); // Aquí debe estar la conexión PDO en $pdo
+include("../db.php"); 
 
 // Eliminar estudiante si se envió el ID por GET
 if (isset($_GET['eliminar'])) {

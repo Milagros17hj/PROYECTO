@@ -9,8 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $apellido = $_POST['apellido'] ?? '';
     $fechaNacimiento = $_POST['fechaNacimiento'] ?? null;
     $correo = $_POST['correo'] ?? '';
-    $telefono = $_POST['telefono1'] ?? '';  // Asegúrate de que el name del input sea "telefono1"
-    $curso_asignado = $_POST['curso'] ?? ''; // Asegúrate de que el name del input sea "curso"
+    $telefono = $_POST['telefono1'] ?? '';
+    $curso_asignado = $_POST['curso'] ?? '';
     $horario = $_POST['horario'] ?? '';
     $genero = $_POST['genero'] ?? '';
     

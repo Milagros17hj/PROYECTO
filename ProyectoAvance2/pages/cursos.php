@@ -1,5 +1,5 @@
 <?php
-include '../db.php'; // Conexión a la base de datos se encuentra en db.php
+include '../db.php'; // La conexión a la base de datos se encuentra en db.php
 
 // Eliminar un curso
 if (isset($_GET['eliminar'])) { // Verifica si se ha solicitado eliminar un curso

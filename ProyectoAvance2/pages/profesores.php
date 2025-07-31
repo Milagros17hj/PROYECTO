@@ -1,5 +1,5 @@
 <?php
-include("../db.php"); // conexión PDO en $pdo
+include("../db.php"); 
 
 // Eliminar profesor si se envió el ID
 if (isset($_GET['eliminar'])) {

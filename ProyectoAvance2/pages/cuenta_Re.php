@@ -1,5 +1,5 @@
 <?php
-  //Se pondría la lógica de conexión a la base de datos aquí
+  //Se pondría la lógica de conexión a la base de datos 
 ?>
 <!DOCTYPE html>
 <html lang="es">
