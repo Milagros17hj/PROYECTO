@@ -1,6 +1,40 @@
 <?php
-  // Simulación de conexión
+include("../db.php");
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recibir datos desde el formulario
+    $codigo = $_POST['codigo'] ?? '';
+    $nombre = $_POST['nombre'] ?? '';
+    $requisitos = $_POST['requisitos'] ?? '';
+    $creditos = $_POST['creditos'] ?? '';
+    $profesor = $_POST['profesor'] ?? '';
+    $horario = $_POST['horario'] ?? '';
+
+    // Validar campos obligatorios
+    if ($codigo && $nombre && $creditos && $profesor && $horario) {
+        $sql = "INSERT INTO cursos (codigo, nombre, requisitos, creditos, profesor, horario)
+                VALUES (:codigo, :nombre, :requisitos, :creditos, :profesor, :horario)";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':codigo', $codigo);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':requisitos', $requisitos);
+        $stmt->bindParam(':creditos', $creditos, PDO::PARAM_INT);
+        $stmt->bindParam(':profesor', $profesor);
+        $stmt->bindParam(':horario', $horario);
+
+        if ($stmt->execute()) {
+            header("Location: cursos.php?registrado=true");
+            exit();
+        } else {
+            $error = "Error al registrar el curso.";
+        }
+    } else {
+        $error = "Por favor complete todos los campos obligatorios.";
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -110,7 +144,7 @@
     <h3 class="titulo-registro">Registro de Curso</h3>
 
     <div class="registro-container">
-      <form action="cursos.php" method="post">
+      <form action="registroCurso.php" method="post">
         <fieldset>
 
           <div class="form-row">

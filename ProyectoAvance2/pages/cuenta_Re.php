@@ -1,5 +1,5 @@
 <?php
-  // Simulación de conexión
+  //Se pondría la lógica de conexión a la base de datos aquí
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -13,9 +13,9 @@
 
   <style>
     body {
-      margin: 0; /* elimina el margen por defecto del navegador */
+      margin: 0; 
       display: flex;
-      flex-direction: column; /* para que el header y footer se alineen verticalmente */
+      flex-direction: column; 
       align-items: center;
       background: linear-gradient(135deg, #f5f5f5, #8fa5d0);
       font-family: 'Poppins', sans-serif;
@@ -56,15 +56,14 @@
     }
 
     footer {
-      color: #161515; 
-      text-align: center; 
-      padding: 10px 0; 
-      position: relative; 
-      margin-bottom: 0;
-       width: 100%; 
-       font-family: 'Poppins', sans-serif;
-       font-size: 14px;
-      }
+      text-align: center;
+      padding: 20px;
+      background-color: #e6eaf5;
+      font-size: 14px;
+      color: #003366;
+      border-top: 2px solid #003366;
+      margin-top: 40px;
+    }
       
     .button {
       display: flex;
@@ -124,7 +123,7 @@
     <div class="registro-container">
       <form action="login.html" method="post"> <!-- /*se usa post porque se almacena la información sensible del formulario*/ -->
         <fieldset>
-          <div class="form-row">
+          <div class="form-row"> <!-- /*se usa form-row para que los campos del formulario se alineen en filas*/ -->
             <div class="form-group col-md-6">
               <label for="tipoIdentificacion">Tipo de Identificación</label>
               <select id="tipoIdentificacion" name="tipoIdentificacion" class="custom-select" required>

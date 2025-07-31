@@ -1,21 +1,20 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-  
-    header("Location: cursos.php?registrado=true");
+include '../db.php'; // Conexión a la base de datos se encuentra en db.php
+
+// Eliminar un curso
+if (isset($_GET['eliminar'])) { // Verifica si se ha solicitado eliminar un curso
+    $id = $_GET['eliminar']; // Obtiene el ID del curso a eliminar (isset verifica que el parámetro esté definido)
+    $stmt = $pdo->prepare("DELETE FROM cursos WHERE id = ?"); // Prepara la consulta para eliminar el curso
+    $stmt->execute([$id]); //Si rxiste el id se elimina
+    header("Location: cursos.php?eliminado=true"); //Me redirije a cursos Se usa para la alerta de SweetAlert
     exit();
 }
 
-// Datos de cursos en arreglo para mostrar en tabla
-$cursos = [
-    ['codigo' => 'INF-101', 'nombre' => 'Introducción a la Informática', 'requisitos' => '-', 'creditos' => 3, 'profesor' => 'Carlos Esquivel Bolaños', 'horario' => 'L 6:00 pm a 9:00 pm'],
-    ['codigo' => 'ARQ-112', 'nombre' => 'Diseño Arquitectonico', 'requisitos' => 'INQ', 'creditos' => 4, 'profesor' => 'Mateo Ovando Salazar', 'horario' => 'S 10:00 pm a 1:00 pm'],
-    ['codigo' => 'II-60', 'nombre' => 'Sistemas Computacionales', 'requisitos' => 'II-21', 'creditos' => 4, 'profesor' => 'Karol Hernández Serrano', 'horario' => 'K 3:00 pm a 6:00 pm'],
-    ['codigo' => 'EI-48', 'nombre' => 'Arquitectura de Computadores', 'requisitos' => 'EI-21', 'creditos' => 3, 'profesor' => 'José Jacamo Tellez', 'horario' => 'L 6:00 pm a 9:00 pm'],
-    ['codigo' => 'IN-20', 'nombre' => 'Inglés II', 'requisitos' => 'IN-10', 'creditos' => 3, 'profesor' => 'Karina Zamora Tercero', 'horario' => 'V 11:00 pm a 1:00 pm'],
-    ['codigo' => 'AE-10', 'nombre' => 'Administración I', 'requisitos' => 'EG-10', 'creditos' => 3, 'profesor' => 'Marcela Barahona Férnandez', 'horario' => 'M 3:00 pm a 6:00 pm']
-];
+// Selecciona todos los cursos para poder ayudarme mostrarlo en la pagina
+$stmt = $pdo->query("SELECT * FROM cursos"); 
+$cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -91,7 +90,7 @@ $cursos = [
       background-color: #00509e; 
       transform: scale(1.1);
     }
-    table {
+    table { /* Estilo para la tabla de cursos */
       width: 90%; 
       border-collapse: collapse;
       margin: 20px auto; 
@@ -100,28 +99,30 @@ $cursos = [
       text-align: center; 
       margin-bottom: 30px;
     }
-    th, td { 
+    th, td { /* Estilo para las celdas de la tabla */
       border: 1px solid #080808; 
       padding: 12px 15px;
       font-size: 80%;
     }
-    thead th { 
+    thead th {  /* Estilo para los encabezados de la tabla */
       background-color: #003366; 
       color: white; 
       text-transform: uppercase; 
       font-weight: bold;
     }
+    /* Estilo para las filas de la tabla */
     tbody tr:hover { 
       background-color: #dce1f5;
       cursor: pointer;
     }
     footer {
-      color: rgb(22, 21, 21); 
-      text-align: center; 
-      padding: 10px 0; 
-      position: relative; 
-      margin-bottom: 0; 
-      width: 100%; 
+      text-align: center;
+      padding: 20px;
+      background-color: #e6eaf5;
+      font-size: 14px;
+      color: #003366;
+      border-top: 2px solid #003366;
+      margin-top: 40px;
     }
     nav ul li.dropdown {
       position: relative; 
@@ -198,11 +199,40 @@ $cursos = [
       box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
       transition: background-color 0.3s ease, transform 0.2s ease;
     }
-    .btn-registrar:hover {
+    .btn-registrar:hover { /* Efecto hover para el botón de registrar curso */
       background-color: #286090;
       transform: scale(1.05);
     }
-    @media (max-width: 600px) {
+
+    th[onclick] {
+    cursor: pointer;
+    position: relative;
+    }
+    
+    th[onclick]::after {
+    content: " ⇅";
+    font-size: 0.8em;
+    color: #cccccc;
+   }
+   
+   th[onclick]:hover::after {
+    color: #ffffff;
+   }
+
+   td:last-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+    @media (max-width: 900px) {
+
+      td:last-child {
+        flex-direction: column;
+        gap: 6px;
+      }
+    
       nav {
         padding: 10px 15px;
       }
@@ -232,12 +262,24 @@ $cursos = [
         font-size: 75%;
       }
     }
+    .titulo-con-icono {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px; /* Espacio entre ícono y texto */
+    }
+    .icono-curso {
+      font-size: 30px; 
+      color: #003366;
+    }
   </style>
 </head>
 <body>
     
   <header>
-    <h1>Cursos</h1>
+    <div class="titulo-con-icono">
+      <i class="fa-solid fa-rectangle-list icono-curso"></i>
+      <h1>Cursos</h1>
+    </div>
   </header>
 
   <nav>
@@ -255,9 +297,9 @@ $cursos = [
           </ul>
         </li>
       <li><a href="login.html">Cerrar Sesión</a></li>
-    </ul>
+    </ul> 
   </nav>
-
+  <!-- Barra de búsqueda de cursos -->
   <main>
     <section>
       <div class="barra-superior">
@@ -266,21 +308,23 @@ $cursos = [
           <input type="text" id="buscadorCurso" placeholder="Buscar">
         </div>
       </div>
+      
       <table>
         <thead>
           <tr>
-            <th>Código</th>
-            <th>Nombre</th>
-            <th>Requisitos</th>
-            <th>Créditos</th>
-            <th>Profesor asignado</th>
-            <th>Horario</th>
+            <th onclick="ordenarTabla(0)">Código</th>
+            <th onclick="ordenarTabla(1)">Nombre</th>
+            <th onclick="ordenarTabla(2)">Requisitos</th>
+            <th onclick="ordenarTabla(3)">Créditos</th>
+            <th onclick="ordenarTabla(4)">Profesor asignado</th>
+            <th onclick="ordenarTabla(5)">Horario</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
+          <!-- INSERTA A LA TABLA -->
           <?php foreach ($cursos as $curso): ?> 
-            <!-- //* Itera sobre los cursos y genera una fila por cada uno, $curso** -->
+            <!--  Itera sobre los cursos y genera una fila por cada uno, $curso -->
           <tr>
             <td><?= htmlspecialchars($curso['codigo']) ?></td>
             <td><?= htmlspecialchars($curso['nombre']) ?></td>
@@ -290,12 +334,13 @@ $cursos = [
             <td><?= htmlspecialchars($curso['horario']) ?></td>
             <td>
               <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
+              <a href="cursos.php?eliminar=<?= $curso['id'] ?>" class="btn-eliminar" ><i class="fas fa-trash-alt"></i> Eliminar</a>
             </td>
           </tr>
           <?php endforeach; ?>
         </tbody>
       </table>
+
       <div class="boton-registrar">
         <a href="registroCurso.php" class="btn-registrar">
           <i class="fa-solid fa-plus"></i> Registrar Curso
@@ -312,17 +357,18 @@ $cursos = [
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script>
     // Alerta de registro exitoso
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search); /* Obtiene los parámetros de la URL */
+    // Verifica si el parámetro 'registrado' está presente
     if (params.has('registrado')) {
       swal("¡Registro exitoso!", "El curso ha sido registrado correctamente.", "success");
+      // limpia el parámetro de la URL para que no salga al refrescar
       window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  </script>
-   
-  <script>
-    // Simulación de eliminación con confirmación de sweetalert
+    }  
+
     document.querySelectorAll('.btn-eliminar').forEach(boton => {
-      boton.addEventListener('click', function() {
+      boton.addEventListener('click', function(event) {
+        event.preventDefault();
+        const href = this.getAttribute('href');
         swal({
           title: "¿Estás seguro?",
           text: "¡Una vez eliminado, no podrás recuperarlo!",
@@ -331,28 +377,44 @@ $cursos = [
           dangerMode: true,
         }).then((willDelete) => {
           if (willDelete) {
-            swal("¡El registro ha sido eliminado!", {
-              icon: "success",
-            });
+            // Redirigir para eliminar en servidor
+            window.location.href = href;
           } else {
             swal("El registro está a salvo.");
           }
         });
       });
     });
-  </script>
 
-  <script>
     // Filtro del buscador para tabla
-    document.getElementById('buscadorCurso').addEventListener('keyup', function() {
+    document.getElementById('buscadorCurso').addEventListener('keyup', function() { /*función que se ejecuta al escribir en el buscador */
       const filtro = this.value.toLowerCase();
       const filas = document.querySelectorAll('table tbody tr');
 
-      filas.forEach(fila => {
+      filas.forEach(fila => { /* Itera sobre cada fila de la tabla */
+        // Convierte el contenido de la fila a minúsculas para comparación
         const texto = fila.textContent.toLowerCase();
-        fila.style.display = texto.includes(filtro) ? '' : 'none';
+        fila.style.display = texto.includes(filtro) ? '' : 'none'; /* Muestra la fila si el texto incluye el filtro, de lo contrario la oculta */
       });
     });
+
+    function ordenarTabla(columna) {
+    const tabla = document.querySelector("table tbody");
+    const filas = Array.from(tabla.querySelectorAll("tr"));
+   // Excluir la fila de encabezado
+    const ordenadas = filas.sort((a, b) => {
+      const textoA = a.children[columna].textContent.trim().toLowerCase();
+      const textoB = b.children[columna].textContent.trim().toLowerCase();
+      return textoA.localeCompare(textoB);
+    });
+
+    // Reemplazar el contenido de la tabla con las filas ordenadas
+    tabla.innerHTML = "";
+    ordenadas.forEach(fila => tabla.appendChild(fila));
+  }
+
+
   </script>
+   
 </body>
 </html>

@@ -1,13 +1,22 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Aquí guardarías el profesor (o simular)
-    // Por ejemplo: guardar en base de datos o en un archivo
-    
-    // Luego rediriges para evitar reenvío del formulario y activar alerta
-    header("Location: profesores.php?registrado=true");
+include("../db.php"); // conexión PDO en $pdo
+
+// Eliminar profesor si se envió el ID
+if (isset($_GET['eliminar'])) {
+    $id = intval($_GET['eliminar']);
+    $stmt = $pdo->prepare("DELETE FROM profesores WHERE id = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    header("Location: profesores.php?eliminado=true");
     exit();
 }
+
+// Obtener lista de profesores
+$stmt = $pdo->query("SELECT * FROM profesores");
+$profesores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -140,14 +149,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     footer {
-      color: rgb(22, 21, 21); 
-      text-align: center; 
-      padding: 10px 0; 
-      position: relative; 
-      margin-bottom: 0;
-      width: 100%; 
+      text-align: center;
+      padding: 20px;
+      background-color: #e6eaf5;
+      font-size: 14px;
+      color: #003366;
+      border-top: 2px solid #003366;
+      margin-top: 40px;
     }
-
     /* Buscador */
     .buscador-profesor {
       position: relative;
@@ -233,6 +242,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       margin-right: 5px;
     }
 
+    th[onclick] {
+    cursor: pointer;
+    position: relative;
+    }
+    
+    th[onclick]::after {
+    content: " ⇅";
+    font-size: 0.8em;
+    color: #cccccc;
+    }
+   
+   th[onclick]:hover::after {
+    color: #ffffff;
+    }
     /* Modal detalle */
     .card {
       display: none;
@@ -291,8 +314,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       margin-bottom: 10px;
     }
 
+    td:last-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+   }
     /* Responsive */
-    @media (max-width: 600px) {
+    @media (max-width: 900px) {
+
+      td:last-child {
+        flex-direction: column;
+        gap: 6px;
+      }
+
       nav {
         padding: 10px 15px;
       }
@@ -322,11 +358,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         font-size: 75%;
       }
     }
+    .titulo-con-icono {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px; /* Espacio entre ícono y texto */
+    }
+    .icono-profesor {
+      font-size: 30px; 
+      color: #003366;
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Profesores</h1>
+    <div class="titulo-con-icono">
+      <i class="fa-solid fa-user-tie icono-profesor"></i>
+      <h1>Profesores</h1>
+    </div>
   </header>
 
   <nav>
@@ -359,80 +407,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <table>
         <thead>
           <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Curso Asignado</th>
-            <th>Correo</th>
+            <th onclick="ordenarTabla(0)">Nombre</th>
+            <th onclick="ordenarTabla(1)">Apellido</th>
+            <th onclick="ordenarTabla(2)">Curso Asignado</th>
+            <th onclick="ordenarTabla(3)">Correo</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
+          <?php foreach ($profesores as $profesor): ?>
           <tr>
-            <td>Marcela</td>
-            <td>Barahona Fernández</td>
-            <td>Administración I</td>
-            <td>mbarahonafa@uc.cr</td>
+            <td><?= htmlspecialchars($profesor['nombre']) ?></td>
+            <td><?= htmlspecialchars($profesor['apellido']) ?></td>
+            <td><?= htmlspecialchars($profesor['curso_asignado']) ?></td>
+            <td><?= htmlspecialchars($profesor['correo']) ?></td>
             <td>
-              <button class="btn-detalle" onclick="mostrarDetalle('Marcela Barahona', 'Administración I', 'mbarahonafa@uc.cr', '+506 7012-3456', 'L a V 5:00 pm a 6:00 pm')"><i class="fas fa-eye"></i> Detalle</button>
+              <button class="btn-detalle" onclick="mostrarDetalle(
+                '<?= htmlspecialchars($profesor['nombre'] . ' ' . $profesor['apellido']) ?>',
+                '<?= htmlspecialchars($profesor['curso_asignado']) ?>',
+                '<?= htmlspecialchars($profesor['correo']) ?>',
+                '<?= htmlspecialchars($profesor['telefono']) ?>',
+                '<?= htmlspecialchars($profesor['horario']) ?>'
+                )">
+                <i class="fas fa-eye"></i> Detalle
+              </button>
               <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
+              <a href="profesores.php?eliminar=<?= $profesor['id'] ?>" class="btn-eliminar" ><i class="fas fa-trash-alt"></i> Eliminar</a>
+              </td>
             </td>
           </tr>
-          <tr>
-            <td>Carlos</td>
-            <td>Esquivel Bolaños</td>
-            <td>Introducción a la Informática</td>
-            <td>cesquivelb@uc.cr</td>
-            <td>
-              <button class="btn-detalle" onclick="mostrarDetalle('Carlos Esquivel', 'Introducción a la Informática', 'cesquivelb@uc.cr', '+506 8888-9999', 'S a L 8:00 am a 9:00 pm')"><i class="fas fa-eye"></i> Detalle</button>
-              <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Karol</td>
-            <td>Hernández Serrano</td>
-            <td>Sistemas Computacionales</td>
-            <td>khernandezs@uc.cr</td>
-            <td>
-              <button class="btn-detalle" onclick="mostrarDetalle('Karol Hernández', 'Sistemas Computacionales', 'khernandezs@uc.cr', '+506 6000-1234', 'L a V 6:00 pm a 7:00 pm')"><i class="fas fa-eye"></i> Detalle</button>
-              <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>José</td>
-            <td>Jacamo Tellez</td>
-            <td>Electrónica Industrial</td>
-            <td>jtellezj@uc.cr</td>
-            <td>
-              <button class="btn-detalle" onclick="mostrarDetalle('José Jacamo', 'Electrónica Industrial', 'jtellezj@uc.cr', '+506 7200-4567', 'J a D 7:00 pm a 8:00 pm')"><i class="fas fa-eye"></i> Detalle</button>
-              <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Mateo</td>
-            <td>Ovando Salazar</td>
-            <td>Arquitectura de Computadores</td>
-            <td>movandos@uc.cr</td>
-            <td>
-              <button class="btn-detalle" onclick="mostrarDetalle('Mateo Ovando', 'Arquitectura de Computadores', 'movandos@uc.cr', '+506 7300-7890', 'L a M 1:00 pm a 2:00 pm')"><i class="fas fa-eye"></i> Detalle</button>
-              <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Karina</td>
-            <td>Zamora Tercero</td>
-            <td>Inglés II</td>
-            <td>kzamorat@uc.cr</td>
-            <td>
-              <button class="btn-detalle" onclick="mostrarDetalle('Karina Zamora', 'Inglés II', 'kzamorat@uc.cr', '+506 7400-1122', 'J a V 5:00 pm a 7:00 pm')"><i class="fas fa-eye"></i> Detalle</button>
-              <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </td>
-          </tr>
+          <?php endforeach; ?>
         </tbody>
       </table>
 
@@ -443,8 +447,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </section>
 
-    <div id="modalDetalle" class="card">
-      <span onclick="cerrarModal()">&times;</span>
+    <div id="modalDetalle" class="card" role="dialog" aria-modal="true" aria-labelledby="modalNombre">
+      <span onclick="cerrarModal()" aria-label="Cerrar modal" role="button" tabindex="0">&times;</span>
       <div class="icono-usuario"><i class="fa-solid fa-circle-user"></i></div>
       <h1 id="modalNombre">Nombre</h1>
       <p id="modalTitulo"></p>
@@ -454,6 +458,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button onclick="cerrarModal()">Cerrar</button>
     </div>
   </main>
+
 
   <footer>
     <p>&copy; 2025 Plataforma Educativa Universidad Central</p>
@@ -469,7 +474,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     document.querySelectorAll('.btn-eliminar').forEach(boton => {
-      boton.addEventListener('click', function() {
+      boton.addEventListener('click', function(event) {
+        event.preventDefault();
+        const href = this.getAttribute('href');
         swal({
           title: "¿Estás seguro?",
           text: "¡Una vez eliminado, no podrás recuperarlo!",
@@ -478,7 +485,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           dangerMode: true,
         }).then((willDelete) => {
           if (willDelete) {
-            swal("¡El registro ha sido eliminado!", { icon: "success" });
+            // Redirigir para eliminar en servidor
+            window.location.href = href;
           } else {
             swal("El registro está a salvo.");
           }
@@ -501,14 +509,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         curso.includes("Administración") ? "Administración" :
         curso.includes("Sistemas") ? "Sistemas" :
         curso.includes("Electrónica") ? "Electrónica" :
-        curso.includes("Arquitectura") ? "Arquitectura" :
-        curso.includes("Inglés") ? "Inglés" : curso
+        curso.includes("Computadores") ? "Informática" :
+        curso.includes("Arquitectónico") ? "Arquitectura" :
+        curso.includes("Inglés") ? "Lenguas Extranjeras" : curso
       );
       document.getElementById('modalTitulo').innerHTML = "<i class='fas fa-graduation-cap'></i> Lic. en " + titulo;
       document.getElementById('modalCorreo').innerHTML = "<i class='fas fa-envelope'></i> " + correo;
       document.getElementById('modalTelefono').innerHTML = "<i class='fas fa-phone'></i> " + telefono;
       document.getElementById('modalHorario').innerHTML = "<i class='fas fa-clock'></i> " + horario;
-      
 
       document.getElementById('modalDetalle').style.display = 'block';
     }
@@ -516,6 +524,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     function cerrarModal() {
       document.getElementById('modalDetalle').style.display = 'none';
     }
+
+    // Función para ordenar la tabla al hacer clic en el encabezado
+    function ordenarTabla(columna) {
+    const tabla = document.querySelector("table tbody");
+    const filas = Array.from(tabla.querySelectorAll("tr"));
+   // Excluir la fila de encabezado
+    const ordenadas = filas.sort((a, b) => {
+      const textoA = a.children[columna].textContent.trim().toLowerCase();
+      const textoB = b.children[columna].textContent.trim().toLowerCase();
+      return textoA.localeCompare(textoB);
+    });
+
+    // Reemplazar el contenido de la tabla con las filas ordenadas
+    tabla.innerHTML = "";
+    ordenadas.forEach(fila => tabla.appendChild(fila));
+  }
   </script>
 
 </body>

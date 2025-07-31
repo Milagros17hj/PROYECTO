@@ -1,7 +1,64 @@
 <?php
+include("../db.php");
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recibir datos desde el formulario
+    $tipoIdentificacion = $_POST['tipoIdentificacion'] ?? '';
+    $identificacion = $_POST['identificacion'] ?? '';
+    $nombre = $_POST['nombre'] ?? '';
+    $apellido = $_POST['apellido'] ?? '';
+    $fechaNacimiento = $_POST['fechaNacimiento'] ?? null;
+    $correo = $_POST['correo'] ?? '';
+    $telefono = $_POST['telefono1'] ?? '';  // Asegúrate de que el name del input sea "telefono1"
+    $curso_asignado = $_POST['curso'] ?? ''; // Asegúrate de que el name del input sea "curso"
+    $horario = $_POST['horario'] ?? '';
+    $genero = $_POST['genero'] ?? '';
+    
+
+    // Validar campos obligatorios
+   if ($tipoIdentificacion && $identificacion && $nombre && $apellido && $correo && $telefono && $curso_asignado && $genero && $horario)
 
 
+        if (empty($fechaNacimiento)) {
+            $fechaNacimiento = null;
+        }
+
+        $sql = "INSERT INTO profesores 
+        (tipoIdentificacion, identificacion, nombre, apellido, fechaNacimiento, correo, telefono, curso_asignado, genero, horario)
+        VALUES 
+        (:tipoIdentificacion, :identificacion, :nombre, :apellido, :fechaNacimiento, :correo, :telefono, :curso_asignado, :genero, :horario)";
+
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':tipoIdentificacion', $tipoIdentificacion);
+        $stmt->bindParam(':identificacion', $identificacion);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':apellido', $apellido);
+        
+        if ($fechaNacimiento === null) {
+            $stmt->bindValue(':fechaNacimiento', null, PDO::PARAM_NULL);
+        } else {
+            $stmt->bindParam(':fechaNacimiento', $fechaNacimiento);
+        }
+
+        $stmt->bindParam(':correo', $correo);
+        $stmt->bindParam(':telefono', $telefono);
+        $stmt->bindParam(':curso_asignado', $curso_asignado);
+        $stmt->bindParam(':horario', $horario);
+        $stmt->bindParam(':horario', $horario);
+        $stmt->bindParam(':genero', $genero);
+
+        if ($stmt->execute()) {
+            header("Location: profesores.php?registrado=true");
+            exit();
+        } else {
+            $error = "Error al registrar el profesor.";
+        }
+}
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -118,9 +175,16 @@
 
   <main>
     <h3 class="titulo-registro">Registro de Profesor</h3>
+    <?php if (!empty($error)): ?>
+  <div style="color: red; text-align: center; margin-bottom: 15px;">
+    <?= htmlspecialchars($error) ?>
+  </div>
+<?php endif; ?>
+
 
     <div class="registro-container">
-      <form action="profesores.php" method="post">
+      <form action="registroProfesor.php" method="post">
+
         <fieldset>
 
           <div class="form-row">
@@ -181,13 +245,16 @@
                 <option value="Teorías Psicológicas">Teorías Psicológicas</option>
                 <option value="Inglés II">Inglés II</option>
                 <option value="Introducción a la Informática">Introducción a la Informática</option>
+                <option value="Diseño Arquitectónico">Diseño Arquitectónico</option>
               </select>
             </div>
           </div>
 
-          
-
-          <div class="form-group">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="horario">Horario</label>
+              <input type="text" class="form-control" id="horario" name="horario" required placeholder="Ej: L 6:00 pm a 9:00 pm">
+            </div>
             <label class="d-block">Género</label>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="genero" id="generoHombre" value="hombre" required>
@@ -202,6 +269,7 @@
               <label class="form-check-label" for="generoOtro">Otro</label>
             </div>
           </div>
+
 
           <div class="button">
             <button type="submit" class="btn btn-primary mr-2">Registrar</button>

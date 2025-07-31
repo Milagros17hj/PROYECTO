@@ -1,13 +1,22 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Aquí guardarías el estudiante (o simular)
-    // Por ejemplo: guardar en base de datos o en un archivo
-    
-    // Luego rediriges para evitar reenvío del formulario y activar alerta
-    header("Location: estudiantes.php?registrado=true");
+include("../db.php"); // Aquí debe estar la conexión PDO en $pdo
+
+// Eliminar estudiante si se envió el ID por GET
+if (isset($_GET['eliminar'])) {
+    $id = intval($_GET['eliminar']);
+    $stmt = $pdo->prepare("DELETE FROM estudiantes WHERE id = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    header("Location: estudiantes.php?eliminado=true");
     exit();
 }
+
+// Obtener lista de estudiantes
+$stmt = $pdo->query("SELECT * FROM estudiantes");
+$estudiantes = $stmt->fetchAll(PDO::FETCH_ASSOC); // esto obtiene todos los estudiantes y los almacena en un array asociativo
+
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -84,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       transition: background-color 0.3s ease, transform 0.3s ease; 
       border-radius: 5px; 
       white-space: nowrap; /* Evita que los enlaces se rompan en varias líneas */
+      text-decoration: none;
     }
         
     nav ul li a:hover { /* Efecto al pasar el mouse sobre el enlace */
@@ -120,12 +130,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     footer {
-      color: rgb(22, 21, 21); 
-      text-align: center; 
-      padding: 10px 0; 
-      position: relative; 
-      margin-bottom: 0; /* Asegura que esté al final de la página */
-      width: 100%; 
+      text-align: center;
+      padding: 20px;
+      background-color: #e6eaf5;
+      font-size: 14px;
+      color: #003366;
+      border-top: 2px solid #003366;
+      margin-top: 100px;
     }
 
     nav ul li.dropdown {
@@ -219,8 +230,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       transform: scale(1.05);
     }
 
+    th[onclick] {
+    cursor: pointer;
+    position: relative;
+    }
+    
+    th[onclick]::after {
+    content: " ⇅";
+    font-size: 0.8em;
+    color: #cccccc;
+   }
+   
+   th[onclick]:hover::after {
+    color: #ffffff;
+   }
+
+   td:last-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
     /* Responsive para nav */
-    @media (max-width: 600px) {
+    @media (max-width: 900px) {
+
+      td:last-child {
+        flex-direction: column;
+        gap: 6px;
+      }
+
       nav {
         padding: 10px 15px;
       }
@@ -250,12 +290,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         font-size: 75%;
       }
     }
+    .titulo-con-icono {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px; /* Espacio entre ícono y texto */
+    }
+    .icono-estudiante {
+      font-size: 30px; 
+      color: #003366;
+    }
+
+    
   </style>
 </head>
 <body>
     
   <header>
-    <h1>Estudiantes</h1>
+    <div class="titulo-con-icono">
+      <i class="fa-solid fa-user-group icono-estudiante"></i>
+      <h1>Estudiantes</h1>
+    </div>
   </header>
 
   <nav>
@@ -284,100 +338,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <input type="text" id="buscadorEstudiante" placeholder="Buscar">
         </div>
       </div>
+
       <table>
         <thead>
           <tr>
-            <th>Carnet</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Identificación</th>
-            <th>Correo</th>
-            <th>Carrera</th>
-            <th>Curso</th>
+            <th onclick="ordenarTabla(0)">Carnet</th>
+            <th onclick="ordenarTabla(1)">Nombre</th>
+            <th onclick="ordenarTabla(2)">Apellido</th>
+            <th onclick="ordenarTabla(3)">Identificación</th>
+            <th onclick="ordenarTabla(4)">Correo</th>
+            <th onclick="ordenarTabla(5)">Carrera</th>
+            <th onclick="ordenarTabla(6)">Curso</th>
             <th>Acciones</th>
+
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>SM1975364</td>
-            <td>María Fernanda</td>
-            <td>Ángulo Pérez</td>
-            <td>118744597</td>
-            <td>MperezA@uc.cr</td>
-            <td>Administración de Empresas</td>
-            <td>Administración I</td>
-            <td>
-              <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>AL2175413</td>
-            <td>Juan Carlos</td>
-            <td>Gómez Rodriguez</td>
-            <td>118744598</td>
-            <td>jgomezp@uc.cr</td>
-            <td>Ingeniería Informática</td>
-            <td>Sistemas Computacionales</td>
-            <td>
-              <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>SM1025785</td>
-            <td>Ana María</td>
-            <td>Pereira Sandoval</td>
-            <td>119744599</td>
-            <td>Apereiras@uc.cr</td>
-            <td>Electrónica Industrial</td>
-            <td>Arquitectura de Computadores</td>
-            <td>
-              <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>AL2871439</td>
-            <td>Rebeca Paola</td>
-            <td>Sánchez López</td>
-            <td>119744600</td>
-            <td>Rsanchezl@uc.cr</td>
-            <td>Teorías Psicológicas</td>
-            <td>Psicología</td>
-            <td>
-              <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>SM12397536</td>
-            <td>Carlos Andrés</td>
-            <td>Ramírez Torres</td>
-            <td>118744601</td>
-            <td>Cramirezt@uc.cr</td>
-            <td>Contaduría</td>
-            <td>Inglés II</td>
-            <td>
-              <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>SM1987342</td>
-            <td>Jimena Patricia</td>
-            <td>Zuñiga Primero</td>
-            <td>119744602</td>
-            <td>Jzuñigap@uc.cr</td>
-            <td>Ingeniería Informática</td>
-            <td>Introducción a la Informática</td>
-            <td>
-              <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </td>
-          </tr>
+          <?php foreach ($estudiantes as $est) : ?>
+            <tr>
+              <td><?= htmlspecialchars($est['carnet']) ?></td>
+              <td><?= htmlspecialchars($est['nombre']) ?></td>
+              <td><?= htmlspecialchars($est['apellido']) ?></td>
+              <td><?= htmlspecialchars($est['identificacion']) ?></td>
+              <td><?= htmlspecialchars($est['correo']) ?></td>
+              <td><?= htmlspecialchars($est['carrera']) ?></td>
+              <td><?= htmlspecialchars($est['curso']) ?></td>
+              <td>
+                <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
+                <a href="estudiantes.php?eliminar=<?= $est['id'] ?>" class="btn-eliminar" ><i class="fas fa-trash-alt"></i> Eliminar</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
         </tbody>
       </table>
+
       <div class="boton-registrar">
         <a href="registroEstudiante.php" class="btn-registrar">
           <i class="fa-solid fa-plus"></i> Registrar Estudiante
@@ -393,19 +387,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script>
-    // Alerta de registro exitoso
     const params = new URLSearchParams(window.location.search);
     if (params.has('registrado')) {
       swal("¡Registro exitoso!", "El estudiante ha sido registrado correctamente.", "success");
-      // Opcional: limpiar el parámetro de la URL para que no salga al refrescar
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-  </script>
-   
-  <script>
-    // Simulación de eliminación con confirmación de sweetalert
+    
     document.querySelectorAll('.btn-eliminar').forEach(boton => {
-      boton.addEventListener('click', function() {
+      boton.addEventListener('click', function(event) {
+        event.preventDefault();
+        const href = this.getAttribute('href');
         swal({
           title: "¿Estás seguro?",
           text: "¡Una vez eliminado, no podrás recuperarlo!",
@@ -414,28 +405,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           dangerMode: true,
         }).then((willDelete) => {
           if (willDelete) {
-            swal("¡El registro ha sido eliminado!", {
-              icon: "success",
-            });
+            // Redirigir para eliminar en servidor
+            window.location.href = href;
           } else {
             swal("El registro está a salvo.");
           }
         });
       });
     });
-  </script>
 
-  <script>
-    // Filtro del buscador para tabla
     document.getElementById('buscadorEstudiante').addEventListener('keyup', function() {
       const filtro = this.value.toLowerCase();
       const filas = document.querySelectorAll('table tbody tr');
-
       filas.forEach(fila => {
         const texto = fila.textContent.toLowerCase();
         fila.style.display = texto.includes(filtro) ? '' : 'none';
       });
     });
+
+   // Función para ordenar la tabla al hacer clic en el encabezado
+    function ordenarTabla(columna) {
+    const tabla = document.querySelector("table tbody");
+    const filas = Array.from(tabla.querySelectorAll("tr"));
+   // Excluir la fila de encabezado
+    const ordenadas = filas.sort((a, b) => {
+      const textoA = a.children[columna].textContent.trim().toLowerCase();
+      const textoB = b.children[columna].textContent.trim().toLowerCase();
+      return textoA.localeCompare(textoB);
+    });
+
+    // Reemplazar el contenido de la tabla con las filas ordenadas
+    tabla.innerHTML = "";
+    ordenadas.forEach(fila => tabla.appendChild(fila));
+  }
+
   </script>
+
 </body>
 </html>

@@ -1,7 +1,56 @@
 <?php
+include("../db.php");
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $tipoIdentificacion = $_POST['tipoIdentificacion'] ?? '';
+    $identificacion = $_POST['identificacion'] ?? '';
+    $carnet = $_POST['carnet'] ?? '';
+    $nombre = $_POST['nombre'] ?? '';
+    $apellido = $_POST['apellido'] ?? '';
+    $fechaNacimiento = $_POST['fechaNacimiento'] ?? null;
+    $correo = $_POST['correo'] ?? '';
+    $carrera = $_POST['carrera'] ?? '';
+    $curso = $_POST['curso'] ?? '';
+    $genero = $_POST['genero'] ?? '';
 
+    if ($tipoIdentificacion && $identificacion && $carnet && $nombre && $apellido && $correo && $carrera && $curso && $genero) {
+        if (empty($fechaNacimiento)) {
+            $fechaNacimiento = null;
+        }
+
+        $sql = "INSERT INTO estudiantes 
+            (tipoIdentificacion, identificacion, carnet, nombre, apellido, fechaNacimiento, correo, carrera, curso, genero)
+            VALUES 
+            (:tipoIdentificacion, :identificacion, :carnet, :nombre, :apellido, :fechaNacimiento, :correo, :carrera, :curso, :genero)";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':tipoIdentificacion', $tipoIdentificacion);
+        $stmt->bindParam(':identificacion', $identificacion);
+        $stmt->bindParam(':carnet', $carnet);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':apellido', $apellido);
+        if ($fechaNacimiento === null) {
+            $stmt->bindValue(':fechaNacimiento', null, PDO::PARAM_NULL);
+        } else {
+            $stmt->bindParam(':fechaNacimiento', $fechaNacimiento);
+        }
+        $stmt->bindParam(':correo', $correo);
+        $stmt->bindParam(':carrera', $carrera);
+        $stmt->bindParam(':curso', $curso);
+        $stmt->bindParam(':genero', $genero);
+
+        if ($stmt->execute()) {
+            header("Location: estudiantes.php?registrado=true");
+            exit();
+        } else {
+            $error = "Error al registrar el estudiante.";
+        }
+    } else {
+        $error = "Por favor complete todos los campos obligatorios.";
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -120,7 +169,7 @@
     <h3 class="titulo-registro">Registro de Estudiante</h3>
 
     <div class="registro-container">
-      <form action="estudiantes.php" method="post">
+      <form action="registroEstudiante.php" method="post">
         <fieldset>
 
           <!-- Tipo y número de identificación -->

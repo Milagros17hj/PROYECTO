@@ -1,5 +1,6 @@
 <?php
-  // Simulación de conexión (opcional)
+include '../db.php';
+date_default_timezone_set('America/Costa_Rica');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,17 +8,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Inicio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+
   <style>
     body {
       margin: 0;
+      padding: 0;
+      height: 100%;
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #8fa5d0, #f5f5f5);
-      padding-top: 70px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
     }
 
     nav {
@@ -66,6 +67,7 @@
       transition: background-color 0.3s ease, transform 0.3s ease;
       border-radius: 5px;
       white-space: nowrap;
+
     }
 
     nav ul li a:hover {
@@ -96,127 +98,156 @@
     }
 
     main {
-      flex: 1;
-      padding: 40px 20px;
+      margin-top: 100px;
+      padding: 30px;
+      margin-right: 320px;
+      min-height: calc(100vh - 70px);
+      box-sizing: border-box;
+    }
+
+    .contenido-principal {
+      max-width: 1000px;
+      margin: auto;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 30px;
     }
 
-    h1, h2 {
-      color: #003366;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .video-container {
-      margin: 30px 0;
-      text-align: center;
-    }
-
-    .avisos-novedades {
-      width: 100%;
-      max-width: 800px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 20px;
-      background-color: #f0f4fa;
-      padding: 30px 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-
-    article.aviso-card {
-      background-color: white;
+    .lateral-derecho {
+      position: fixed;
+      top: 70px;
+      right: 0;
+      width: 300px;
+      height: calc(100vh - 70px); /* Altura total menos la altura del nav */
+      background-color: #91acd6ff;
       padding: 20px;
+      box-shadow: -4px 0 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-sizing: border-box;
+      z-index: 900; /*esto asegura que el lateral derecho esté por encima del contenido principal*/
+      font-size: 13px;
+      letter-spacing: 0.3px;
+      overflow-y: auto; /* Permite el desplazamiento si el contenido es demasiado largo */
+    }
+
+    .lateral-derecho > .cuadro:first-child {
+      margin-top: 40px;
+    }
+
+    .cuadro, .video-container, .aviso-card, .frase-bienvenida {
+      background-color: #ffffff;
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      text-align: left;
+      padding: 20px;
+      
     }
 
-    article h3 {
-      color: #1d3f72;
+    .cuadro h3, .aviso-card h3 {
+      color: #003366;
+      font-size: 15px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 18px;
-      margin-bottom: 10px;
+      
     }
 
-    article p,
-    article ul {
-      font-size: 14px;
-      color: #333;
+    .cuadro p, .cuadro ul li {
+      margin: 0 0 8px 0;
+    }
+    
+    .icono-usuario {
+      font-size: 60px;
+      color: #003366;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+
+    .cuadro ul {
+      padding-left: 18px;
       margin: 0;
+      color: #333333;
+
     }
 
-    article ul {
-      padding-left: 20px;
+    .aviso-card ul li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .video-container iframe {
+      width: 100%;
+      height: 315px;
+      border: none;
     }
 
     .frase-bienvenida {
       font-style: italic;
-      color: #444;
-      margin-top: 40px;
+      border-left: 5px solid #003366;
       font-size: 16px;
-      max-width: 800px;
-      text-align: left;
+      color: #003366;
+      padding-left: 15px;
     }
 
+    h1, h2 {
+      color: #003366;
+      margin: 0;
+      text-align: center;
+    }
     footer {
       text-align: center;
-      padding: 15px 0;
-      background-color: #f0f0f0;
+      padding: 20px;
       font-size: 14px;
-      color: #333;
+      color: #003366;
+      margin-top: 70px;
+    }
+    
+  
+    .flatpickr-calendar.inline {
+      box-shadow: none;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      width: 100%;
+      border: none;
+      margin-top: 10px;
+      font-size: 10px;
     }
 
-    @media (max-width: 600px) {
-      nav {
-        padding: 10px 15px;
+    #calendarioFijo {
+      height: 0;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+    }
+
+    @media (max-width: 768px) {
+      main {
+        margin-right: 0;
+        padding: 20px 10px;
       }
 
-      .logo {
-        width: 50px;
-        margin-right: 10px;
-      }
-
-      nav ul {
-        justify-content: center;
-        gap: 15px;
+      .lateral-derecho {
+        position: static;
         width: 100%;
-        margin-top: 10px;
-        flex-wrap: wrap;
-      }
-
-      nav ul li a {
-        padding: 8px 12px;
-        font-size: 90%;
-        white-space: nowrap;
-      }
-
-      .avisos-novedades {
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin-top: 20px;
         padding: 20px;
       }
 
-      article.aviso-card {
-        padding: 15px;
-      }
-
-      article h3 {
-        font-size: 16px;
-      }
-
-      article p, article ul {
-        font-size: 13px;
-      }
-
-      .frase-bienvenida {
-        font-size: 14px;
-        text-align: center;
+      .lateral-derecho > .cuadro:first-child {
+        margin-top: 20px;
       }
     }
+
+    
   </style>
 </head>
 <body>
@@ -239,34 +270,79 @@
   </nav>
 
   <main>
-    <h1>Bienvenido al sistema educativo</h1>
-    <h2>Explorá la plataforma educativa</h2>
+    <div class="contenido-principal">
+      <h1>Bienvenido al sistema educativo</h1>
+      <h2>Explorá la plataforma educativa</h2>
 
-    <div class="video-container">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/E1mYs7dw1qc?si=jSTJ1Kt6Hh3VYsj1"
-        title="Video Incrustado" frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen></iframe>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/E1mYs7dw1qc?si=jSTJ1Kt6Hh3VYsj1"
+          title="Video Incrustado"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+
+      <div class="aviso-card">
+        <h3><i class="fas fa-bullhorn"></i> Avisos Importantes</h3>
+        <ul>
+          <li><i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento web programado: <strong>3 de agosto</strong>.</li>
+          <li><i class="fas fa-calendar-alt"></i> Taller de investigación académica: <strong>7 de agosto</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="aviso-card">
+        <h3><i class="fas fa-lightbulb"></i> Novedades</h3>
+        <ul>
+          <li><i class="fa-solid fa-font-awesome"></i> ¡Nuevo sistema de gestiones con interfaz mejorada!</li>
+          <li><i class="fa-solid fa-magnifying-glass"></i> Se ha integrado búsquedas avanzadas.</li>
+        </ul>
+      </div>
+
+      <div class="frase-bienvenida">
+        “La educación no es preparación para la vida; la educación es la vida en sí misma.” - John Dewey
+      </div>
     </div>
 
-    <section class="avisos-novedades">
-      <article class="aviso-card">
-        <h3><i class="fas fa-calendar-alt"></i> Matrícula Ordinaria</h3>
-        <p>La matrícula para el III Cuatrimestre 2025 comienza el <strong>30 de junio</strong>. Consultá el calendario académico para más detalles.</p>
-      </article>
+    <aside class="lateral-derecho">
+      <div class="cuadro">
+        <div class="icono-usuario">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <h3><i class="fas fa-user"></i> Usuario</h3>
+        <p><strong>Nombre:</strong> Usuario 1</p>
+        <p><strong>Correo:</strong> Admi@ejemplo.com</p>
+        <p><strong>Rol:</strong> Administrador</p>
+        <p><strong>ID:</strong> 1023</p>
+        <p><strong>Último acceso:</strong> <?= date("d/m/Y - h:i A") ?></p>
+      </div>
 
-      <article class="aviso-card">
-        <h3><i class="fas fa-envelope"></i> Correo Institucional</h3>
-        <p>¿Aún no tenés acceso? Contactá al equipo de Soporte de la Universidad Central</p>
-      </article>
-    </section>
-
-    <p class="frase-bienvenida">“Un espacio pensado para estudiantes y profesores”</p>
+      <div class="cuadro">
+        <h3><i class="fas fa-newspaper"></i> Noticias</h3>
+        <ul>
+          <li>Capacitación docente el <strong>10 de agosto</strong>.</li>
+          <li>Mejoras en la plataforma de gestión académica.</li>
+          <li>Actualización de horarios para el próximo cuatrimestre.</li>
+          <li>Nuevo curso de habilidades blandas disponible.</li>
+        </ul>
+      </div>
+      
+      <div class="cuadro">
+        <h3><i class="fas fa-calendar-day"></i> Calendario</h3>
+        <input id="calendarioFijo" type="text">
+      </div>
+    </aside>
   </main>
 
   <footer>
     <p>&copy; 2025 Plataforma Educativa Universidad Central</p>
     <p>Contacto: <a href="mailto:mhernandezj@uc.ac.cr">Milagros Hernández</a></p>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+  flatpickr("#calendarioFijo", {
+    inline: true,
+    dateFormat: "Y-m-d",
+    locale: "es"
+  });
+</script>
 </body>
 </html>
