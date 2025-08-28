@@ -43,20 +43,6 @@ $profesores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-<?php if (isset($_GET['error']) && $_GET['error'] === 'permiso_denegado'): ?>
-  <script>
-    swal("Acceso denegado", "Solo los administradores pueden eliminar profesores.", "error");
-  </script>
-<?php elseif (isset($_GET['error']) && $_GET['error'] === 'eliminacion_fallida'): ?>
-  <script>
-    swal("Error", "No se pudo eliminar el profesor. Puede estar vinculado a cursos o matrículas.", "error");
-  </script>
-<?php elseif (isset($_GET['eliminado'])): ?>
-  <script>
-    swal("¡Eliminado!", "El profesor ha sido eliminado correctamente.", "success");
-  </script>
-<?php endif; ?>
-
 <header>
   <div class="titulo-con-icono">
     <i class="fa-solid fa-user-tie icono-profesor"></i>

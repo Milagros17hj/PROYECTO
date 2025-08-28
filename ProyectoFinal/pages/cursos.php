@@ -43,20 +43,6 @@ $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-<?php if (isset($_GET['error']) && $_GET['error'] === 'permiso_denegado'): ?>
-  <script>
-    swal("Acceso denegado", "Solo los administradores pueden eliminar cursos.", "error");
-  </script>
-<?php elseif (isset($_GET['error']) && $_GET['error'] === 'eliminacion_fallida'): ?>
-  <script>
-    swal("Error", "No se pudo eliminar el curso. Puede tener estudiantes o matrículas vinculadas.", "error");
-  </script>
-<?php elseif (isset($_GET['eliminado'])): ?>
-  <script>
-    swal("¡Eliminado!", "El curso ha sido eliminado correctamente.", "success");
-  </script>
-<?php endif; ?>
-
 <header>
   <div class="titulo-con-icono">
     <i class="fa-solid fa-rectangle-list icono-curso"></i>

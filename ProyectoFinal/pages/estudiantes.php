@@ -44,20 +44,6 @@ $estudiantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-<?php if (isset($_GET['error']) && $_GET['error'] === 'permiso_denegado'): ?>
-  <script>
-    swal("Acceso denegado", "Solo los administradores pueden eliminar estudiantes.", "error");
-  </script>
-<?php elseif (isset($_GET['error']) && $_GET['error'] === 'eliminacion_fallida'): ?>
-  <script>
-    swal("Error", "No se pudo eliminar el estudiante. Puede tener registros vinculados.", "error");
-  </script>
-<?php elseif (isset($_GET['eliminado'])): ?>
-  <script>
-    swal("¡Eliminado!", "El estudiante ha sido eliminado correctamente.", "success");
-  </script>
-<?php endif; ?>
-
 <header>
   <div class="titulo-con-icono">
     <i class="fa-solid fa-user-group icono-estudiante"></i>
