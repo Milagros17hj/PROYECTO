@@ -1,0 +1,113 @@
+
+    body {
+      margin: 0;
+      background-image: url('../imagenes/fondo.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: flex-start; /* Alinea a la izquierda */
+      align-items: center;         /* Centra verticalmente */
+      height: 100vh;
+    }
+
+    .contenedor-login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;         /* Centra el logo respecto al formulario */
+      margin-left: 80px;           /* Margen institucional izquierdo */
+      margin-top: 10px;
+    }
+
+    .logo {
+      width: 180px;
+      height: auto;
+      margin-bottom: 40px;
+    }
+
+    main {
+      width: 450px;
+      max-width: 500px;
+      background-color: rgba(255, 255, 255, 0.75); /* blanco con 75% de opacidad */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 2px 2px 5px #000000;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      color: #003366; 
+    }
+
+    legend {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .form-group label {
+      margin-top: 15px;
+      display: block;
+      font-weight: bold;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #2e2e30;
+      border-radius: 5px;
+      box-shadow: 1px 1px 4px #000000;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0e074d;
+      box-shadow: 2px 2px 4px #16337c;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #0077cc;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      font-family:'Times New Roman', Times, serif;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.4s ease-in-out;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00aa88;
+    }
+
+    .forgot-password {
+      text-align: right;
+      font-size: 90%;
+      color: #031a65;
+      font-style: italic;
+      cursor: pointer;
+    }
+
+    .registrologin-link {
+      text-align: left;
+      margin-top: 15px;
+      font-style: italic;
+      font-size: 90%;
+      color: #031a65;
+    }
+
+    footer {
+      color: rgb(22, 21, 21);
+      text-align: center;
+      padding: 10px 0;
+      margin-top: 20px;
+      width: 480px;
+    }

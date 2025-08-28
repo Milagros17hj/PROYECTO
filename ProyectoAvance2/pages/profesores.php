@@ -431,7 +431,7 @@ $profesores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <i class="fas fa-eye"></i> Detalle
               </button>
               <button class="btn-editar"><i class="fas fa-edit"></i> Editar</button>
-              <form method="POST" action="profesores.php" class="form-eliminar" style="display:inline;">
+              <form method="POST" action="profesores.php" class="form-eliminar" >
                 <input type="hidden" name="eliminar" value="<?= $profesor['id'] ?>">
                 <button type="submit" class="btn-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
               </form>

@@ -1,0 +1,98 @@
+ body {
+      margin: 0; 
+      display: flex;
+      flex-direction: column; 
+      align-items: center;
+      background-color: #dbe7f4;
+      font-family: 'Poppins', sans-serif;
+      
+    }
+
+    header {
+      background-color: #003366;
+      width: 100%;
+      padding: 20px 0;
+      text-shadow: 0 2px 2px #8391c2;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      text-align: center;
+      color: #f8f7f7;
+      font-size: 200%;
+      font-weight: bold;
+      margin: 0; /* elimina el margen por defecto */
+      font-family: 'Poppins', sans-serif;
+    }
+
+    h2 {
+      text-align: center;
+      color: #e6e4e4;
+      font-size: 110%;
+      margin: 10px 0 0;
+      font-family: 'Poppins', sans-serif;
+      font-weight: bold;
+      text-shadow: 0 2px 2px #8391c2;
+    }
+
+    .logo {
+      max-width: 140px;
+      display: block;
+      margin: 15px auto;
+    }
+
+    footer {
+      color: #161515;
+      text-align: center;
+      padding: 10px 0;
+      position: relative;
+      margin-bottom: 0;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+    }
+
+      
+    .button {
+      display: flex;
+      justify-content: center;
+      gap: 1rem; 
+    }
+
+     main {
+      width: 100%;
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #003366;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.3);
+      font-size: 90%;
+   }
+
+   .registro-container {
+      margin: 0 auto; 
+      padding: 30px; 
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h3 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .text-login { /* Pregunta sobre la cuenta */
+      text-align: center;
+      margin-top: 20px;
+      font-style: italic;
+      color: #031a65;
+      font-size: 100%;
+      font-family: 'Times New Roman', Times, serif;
+    }
+    
+
+    

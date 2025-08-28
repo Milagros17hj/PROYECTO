@@ -33,6 +33,7 @@ date_default_timezone_set('America/Costa_Rica');
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
+      border-bottom: 3px solid #f0f2f5;
     }
 
     .logo {
@@ -82,7 +83,7 @@ date_default_timezone_set('America/Costa_Rica');
     nav ul li .submenu {
       display: none;
       position: absolute;
-      background-color: #003366;
+      background-color: #29323bff;
       list-style: none;
       border: 1px solid #ccc;
       padding: 8px;
@@ -117,11 +118,9 @@ date_default_timezone_set('America/Costa_Rica');
       position: fixed;
       top: 70px;
       right: 0;
-      width: 300px;
+      width: 300px; 
       height: calc(100vh - 70px); /* Altura total menos la altura del nav */
-      background-color: #91acd6ff;
       padding: 20px;
-      box-shadow: -4px 0 8px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
       gap: 20px;
@@ -130,6 +129,9 @@ date_default_timezone_set('America/Costa_Rica');
       font-size: 13px;
       letter-spacing: 0.3px;
       overflow-y: auto; /* Permite el desplazamiento si el contenido es demasiado largo */
+      background-color: #003366; /* fondo institucional claro */
+      border-left: 3px solid #f0f2f5;
+
     }
 
     .lateral-derecho > .cuadro:first-child { /*estilo para el primer cuadro en el lateral derecho*/
@@ -139,7 +141,7 @@ date_default_timezone_set('America/Costa_Rica');
     .cuadro, .video-container, .aviso-card, .frase-bienvenida { /*estilos para los cuadros de contenido, video y avisos*/
       background-color: #ffffff;
       border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px #0000001a;
       padding: 20px;
       
     }
