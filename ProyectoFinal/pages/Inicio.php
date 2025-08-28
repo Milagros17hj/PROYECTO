@@ -20,19 +20,9 @@ if(!isset($_SESSION['correo'])) {
 <body>
 
 <?php if(isset($_SESSION['bienvenido'])): ?>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script>
-swal({
-    title: '¡Bienvenido!',
-    text: '<?= addslashes($_SESSION['bienvenido']) ?>',
-    icon: 'success',
-    button: false,
-    timer: 1800
-});
-</script>
-<?php 
-unset($_SESSION['bienvenido']); // Evita que aparezca de nuevo al recargar
-endif; ?>
+  <div id="alertaBienvenida" data-mensaje="<?= htmlspecialchars($_SESSION['bienvenido']) ?>"></div>
+  <?php unset($_SESSION['bienvenido']); ?>
+<?php endif; ?>
 
   <nav>
     <img src="../imagenes/LogoU.png" alt="Logo Universidad Central" class="logo">
@@ -124,7 +114,8 @@ endif; ?>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="../js/scripts.js"></script>
   <!-- /* Inicialización del calendario */ -->
   <script>
   flatpickr("#calendarioFijo", {

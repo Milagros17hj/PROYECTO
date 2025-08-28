@@ -202,6 +202,22 @@ function mostrarCampoID() {
 }
 
 // Alertas SweetAlert
+document.addEventListener("DOMContentLoaded", function () {
+  const alerta = document.getElementById("alertaBienvenida");
+  if (!alerta) return;
+
+  const mensaje = alerta.dataset.mensaje;
+  if (mensaje) {
+    swal({
+      title: "¡Bienvenido!",
+      text: mensaje,
+      icon: "success",
+      button: false,
+      timer: 1800
+    });
+  }
+});
+
 function alertaRegistro(tipo, mensaje, redirect = null) {
     swal({
         title: tipo === 'exito' ? "¡Registro Exitoso!" : "Error",
