@@ -555,3 +555,16 @@
         margin-top: 20px;
       }
     }
+    .desactivado {
+      pointer-events: none;       
+      opacity: 0.5;               
+      cursor: not-allowed;        
+      filter: grayscale(40%);     
+      transition: opacity 0.3s ease;
+    
+    }
+
+    button[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }

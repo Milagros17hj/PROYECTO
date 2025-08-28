@@ -70,8 +70,8 @@ endif; ?>
       <div class="aviso-card">
         <h3><i class="fas fa-bullhorn"></i> Avisos Importantes</h3>
         <ul>
-          <li><i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento web programado: <strong>3 de agosto</strong>.</li>
-          <li><i class="fas fa-calendar-alt"></i> Taller de investigación académica: <strong>7 de agosto</strong>.</li>
+          <li><i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento web programado: <strong>30 de agosto</strong>.</li>
+          <li><i class="fas fa-calendar-alt"></i> Taller de investigación académica: <strong>28 de agosto</strong>.</li>
         </ul>
       </div>
 
@@ -96,7 +96,7 @@ endif; ?>
         <h3><i class="fas fa-user"></i> Usuario</h3>
         <p><strong>Nombre:</strong> <?= htmlspecialchars($_SESSION['nombre']) ?></p>
         <p><strong>Correo:</strong> <?= htmlspecialchars($_SESSION['correo']) ?></p>
-        <p><strong>Rol:</strong> <?= htmlspecialchars($_SESSION['rol']) ?></p>
+        <p><strong>Rol:</strong> <?= htmlspecialchars($_SESSION['tipoUsuario']) ?></p>
         <p><strong>ID:</strong> <?= htmlspecialchars($_SESSION['idUsuario']) ?></p>
         <p><strong>Último acceso:</strong> <?= date("d/m/Y - h:i A") ?></p>
       </div>

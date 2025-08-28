@@ -169,7 +169,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-        <!-- Botones -->
         <div class="grupo-boton">
           <button type="submit" class="btn btn-primary">Registrar</button>
           <a href="Inicio.php" class="btn btn-secondary">Cancelar</a>

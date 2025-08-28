@@ -16,7 +16,6 @@ if (isset($_POST['eliminar'])) {
     exit();
 }
 
-// Consulta de cursos con nombre del profesor
 $stmt = $pdo->query("
     SELECT c.*, p.nombre AS profesorNombre
     FROM cursos c
@@ -33,17 +32,7 @@ $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="../css/estilos.css" />
   <title>Cursos</title>
-  <style>
-    .desactivado {
-      pointer-events: none;
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    button[disabled] {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  </style>
+
 </head>
 <body>
 
